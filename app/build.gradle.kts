@@ -35,6 +35,10 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
+    buildFeatures{
+        viewBinding=true
+    }
 }
 
 dependencies {
@@ -51,14 +55,27 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
 // navigation component
-    implementation ("androidx.navigation:navigation-fragment-ktx:$2.3.5")
-    implementation ("androidx.navigation:navigation-ui-ktx:$2.3.5")
+    implementation (libs.androidx.navigation.fragment.ktx)
+    implementation (libs.androidx.navigation.ui.ktx)
 
     //intuit
-    implementation ("com.intuit.sdp:sdp-android:1.0.6")
-    implementation ("com.intuit.ssp:ssp-android:1.0.6")
+    implementation (libs.sdp.android)
+    implementation (libs.ssp.android)
 
     //gif
-    implementation ("pl.droidsonroids.gif:android-gif-drawable:1.2.17")
+    implementation (libs.android.gif.drawable)
 
+
+    //retrofit
+    //noinspection UseTomlInstead
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation (libs.converter.gson)
+    implementation ("com.squareup.retrofit2:adapter-rxjava3:2.9.0")
+
+    //glide
+    implementation ("com.github.bumptech.glide:glide:4.16.0")
+
+//viewModel
+    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.0")
+    implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.9.0")
 }
