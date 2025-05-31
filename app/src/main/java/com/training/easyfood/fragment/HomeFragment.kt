@@ -13,12 +13,14 @@ import com.training.easyfood.activity.MealInformationActivity
 import com.training.easyfood.databinding.FragmentHomeBinding
 import com.training.easyfood.pojo.Meal
 import com.training.viewModel.HomeViewModel
+import com.training.viewModel.MealViewModel
 
 
 class HomeFragment : Fragment() {
     lateinit var binding: FragmentHomeBinding
     lateinit var homeMvvm: HomeViewModel
     lateinit var randomMEal: Meal
+    lateinit var mealMVVM : MealViewModel
 
 companion object{
     const val MEAL_ID  ="com.training.easyfood.fragment.idMeal"
@@ -38,9 +40,6 @@ companion object{
         // Inflate the layout for this fragment
         binding= FragmentHomeBinding.inflate(inflater,container,false)
         return binding.root
-
-
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -50,6 +49,7 @@ companion object{
         homeMvvm.getRandomMeal()
         observeRandomeMeal()
         onRandomMEalClick()
+
     }
 
     private fun onRandomMEalClick() {
