@@ -8,9 +8,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.training.easyfood.activity.MealInformationActivity
+import com.training.easyfood.adapter.PopularAdapter
 import com.training.easyfood.databinding.FragmentHomeBinding
+import com.training.easyfood.pojo.CategoryMeal
 import com.training.easyfood.pojo.Meal
 import com.training.viewModel.HomeViewModel
 import com.training.viewModel.MealViewModel
@@ -21,6 +25,7 @@ class HomeFragment : Fragment() {
     lateinit var homeMvvm: HomeViewModel
     lateinit var randomMEal: Meal
     lateinit var mealMVVM : MealViewModel
+    lateinit var popularAdapter: PopularAdapter
 
 companion object{
     const val MEAL_ID  ="com.training.easyfood.fragment.idMeal"
@@ -31,6 +36,7 @@ companion object{
         super.onCreate(savedInstanceState)
 
         homeMvvm= ViewModelProvider(this).get(HomeViewModel::class.java)
+        popularAdapter= PopularAdapter()
     }
 
     override fun onCreateView(
@@ -45,11 +51,38 @@ companion object{
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.recViewPopular.apply {
+            adapter= popularAdapter
+            layoutManager= LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL,false)
+        }
 
         homeMvvm.getRandomMeal()
         observeRandomeMeal()
         onRandomMEalClick()
+        homeMvvm.getPopulaMeal()
+        observePopularMeal()
 
+        onPopularMealClick()
+    }
+
+    private fun onPopularMealClick() {
+        popularAdapter.onItemClick={meal ->
+            val intent = Intent(activity, MealInformationActivity::class.java)
+            intent.putExtra(MEAL_ID,meal.idMeal)
+            intent.putExtra(MEAL_NAME,meal.strMeal)
+            intent.putExtra(MEAL_THUMB,meal.strMealThumb)
+            startActivity(intent)
+        }
+    }
+
+    private fun observePopularMeal() {
+        homeMvvm.observePopularMeal().observe(viewLifecycleOwner,object : Observer<List<CategoryMeal>>{
+            override fun onChanged(value: List<CategoryMeal>) {
+
+                popularAdapter.setMeal(mealList = value as ArrayList<CategoryMeal>)
+            }
+
+        })
     }
 
     private fun onRandomMEalClick() {
