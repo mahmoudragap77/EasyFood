@@ -1,5 +1,6 @@
 package com.training.easyfood.retrofit
 
+import com.training.easyfood.pojo.CategoryList
 import com.training.easyfood.pojo.MealList
 import retrofit2.Call
 import retrofit2.http.GET
@@ -12,4 +13,7 @@ interface MealApi {
 
     @GET("lookup.php?")
     fun getMealDetails(@Query("i") id : String) :Call<MealList>
+
+    @GET("filter.php?")
+    fun getPopularMeal(@Query("c") category: String): Call<CategoryList>
 }

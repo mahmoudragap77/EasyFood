@@ -3,8 +3,8 @@ package com.training.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.bumptech.glide.Glide
-import com.training.easyfood.fragment.HomeFragment
+import com.training.easyfood.pojo.CategoryList
+import com.training.easyfood.pojo.CategoryMeal
 import com.training.easyfood.pojo.Meal
 import com.training.easyfood.pojo.MealList
 import com.training.easyfood.retrofit.RetrofitInstance
@@ -15,6 +15,7 @@ import retrofit2.Response
 class HomeViewModel: ViewModel() {
 
     private var randomMeal = MutableLiveData<Meal>()
+    private var popularMeal = MutableLiveData<List<CategoryMeal>>()
     fun getRandomMeal(){
         RetrofitInstance.api.getRandomMeal().enqueue(object : Callback<MealList>{
             override fun onResponse(
@@ -43,5 +44,33 @@ class HomeViewModel: ViewModel() {
     fun observeRandomMealLiveData(): LiveData<Meal>{
         return randomMeal
 
+    }
+
+    fun getPopulaMeal(){
+        RetrofitInstance.api.getPopularMeal("Seafood").enqueue(object : Callback<CategoryList> {
+            override fun onResponse(
+                call: Call<CategoryList?>,
+                response: Response<CategoryList?>
+            ) {
+                if (response.body()!=null){
+
+                    val popularMeals = response.body()!!.meals
+                    popularMeal.value=popularMeals
+                }else{
+                    return
+                }
+            }
+
+            override fun onFailure(
+                call: Call<CategoryList?>,
+                t: Throwable
+            ) {
+                TODO("Not yet implemented")
+            }
+        })
+    }
+
+    fun observePopularMeal(): LiveData<List<CategoryMeal>>{
+        return popularMeal
     }
 }
