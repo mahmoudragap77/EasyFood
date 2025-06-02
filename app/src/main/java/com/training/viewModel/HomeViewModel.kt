@@ -3,8 +3,10 @@ package com.training.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.training.easyfood.pojo.Category
 import com.training.easyfood.pojo.CategoryList
-import com.training.easyfood.pojo.CategoryMeal
+import com.training.easyfood.pojo.PopularMealList
+import com.training.easyfood.pojo.PopularMeal
 import com.training.easyfood.pojo.Meal
 import com.training.easyfood.pojo.MealList
 import com.training.easyfood.retrofit.RetrofitInstance
@@ -15,7 +17,37 @@ import retrofit2.Response
 class HomeViewModel: ViewModel() {
 
     private var randomMeal = MutableLiveData<Meal>()
-    private var popularMeal = MutableLiveData<List<CategoryMeal>>()
+    private var popularMeal = MutableLiveData<List<PopularMeal>>()
+    private var categoryList = MutableLiveData<List<Category>>()
+
+    fun getCategoryList(){
+        RetrofitInstance.api.getCategoryList().enqueue(object : Callback<CategoryList>{
+            override fun onResponse(
+                call: Call<CategoryList?>,
+                response: Response<CategoryList?>
+            ) {
+                if (response.body()!= null){
+                    val category= response.body()!!.categories
+                    categoryList.value=category
+                }else{
+                    return
+                }
+            }
+
+            override fun onFailure(
+                call: Call<CategoryList?>,
+                t: Throwable
+            ) {
+                TODO("Not yet implemented")
+            }
+
+        })
+    }
+
+    fun observeCategoryList(): LiveData<List<Category>>{
+        return categoryList
+    }
+
     fun getRandomMeal(){
         RetrofitInstance.api.getRandomMeal().enqueue(object : Callback<MealList>{
             override fun onResponse(
@@ -47,10 +79,10 @@ class HomeViewModel: ViewModel() {
     }
 
     fun getPopulaMeal(){
-        RetrofitInstance.api.getPopularMeal("Seafood").enqueue(object : Callback<CategoryList> {
+        RetrofitInstance.api.getPopularMeal("Seafood").enqueue(object : Callback<PopularMealList> {
             override fun onResponse(
-                call: Call<CategoryList?>,
-                response: Response<CategoryList?>
+                call: Call<PopularMealList?>,
+                response: Response<PopularMealList?>
             ) {
                 if (response.body()!=null){
 
@@ -62,7 +94,7 @@ class HomeViewModel: ViewModel() {
             }
 
             override fun onFailure(
-                call: Call<CategoryList?>,
+                call: Call<PopularMealList?>,
                 t: Throwable
             ) {
                 TODO("Not yet implemented")
@@ -70,7 +102,7 @@ class HomeViewModel: ViewModel() {
         })
     }
 
-    fun observePopularMeal(): LiveData<List<CategoryMeal>>{
+    fun observePopularMeal(): LiveData<List<PopularMeal>>{
         return popularMeal
     }
 }
