@@ -8,13 +8,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.training.easyfood.activity.MealInformationActivity
+import com.training.easyfood.adapter.CategoryAdapter
 import com.training.easyfood.adapter.PopularAdapter
 import com.training.easyfood.databinding.FragmentHomeBinding
-import com.training.easyfood.pojo.CategoryMeal
+import com.training.easyfood.pojo.Category
+import com.training.easyfood.pojo.CategoryList
+import com.training.easyfood.pojo.PopularMeal
 import com.training.easyfood.pojo.Meal
 import com.training.viewModel.HomeViewModel
 import com.training.viewModel.MealViewModel
@@ -26,6 +29,7 @@ class HomeFragment : Fragment() {
     lateinit var randomMEal: Meal
     lateinit var mealMVVM : MealViewModel
     lateinit var popularAdapter: PopularAdapter
+    lateinit var categoryAdapter : CategoryAdapter
 
 companion object{
     const val MEAL_ID  ="com.training.easyfood.fragment.idMeal"
@@ -37,6 +41,7 @@ companion object{
 
         homeMvvm= ViewModelProvider(this).get(HomeViewModel::class.java)
         popularAdapter= PopularAdapter()
+        categoryAdapter= CategoryAdapter()
     }
 
     override fun onCreateView(
@@ -56,13 +61,42 @@ companion object{
             layoutManager= LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL,false)
         }
 
+        binding.recCategory.apply {
+            adapter=categoryAdapter
+            layoutManager= GridLayoutManager(activity,3, GridLayoutManager.VERTICAL,false)
+        }
+
         homeMvvm.getRandomMeal()
         observeRandomeMeal()
         onRandomMEalClick()
+
         homeMvvm.getPopulaMeal()
         observePopularMeal()
-
         onPopularMealClick()
+
+        homeMvvm.getCategoryList()
+        observeCategoryList()
+//        onCategoryListClick()
+    }
+
+//    private fun onCategoryListClick() {
+//        categoryAdapter.onItemClick= {
+//            category ->
+//            val intent = Intent(activity, MealInformationActivity::class.java)
+//            intent.putExtra(MEAL_ID,category.idCategory)
+//            intent.putExtra(MEAL_THUMB,category.strCategoryThumb)
+//            intent.putExtra(MEAL_NAME,category.strCategory)
+//            startActivity(intent)
+//        }
+//    }
+
+    private fun observeCategoryList() {
+        homeMvvm.observeCategoryList().observe(viewLifecycleOwner, object : Observer<List<Category>>{
+            override fun onChanged(value: List<Category>) {
+                categoryAdapter.setCategoryList(categoryList = value as ArrayList<Category>)
+            }
+
+        })
     }
 
     private fun onPopularMealClick() {
@@ -76,10 +110,10 @@ companion object{
     }
 
     private fun observePopularMeal() {
-        homeMvvm.observePopularMeal().observe(viewLifecycleOwner,object : Observer<List<CategoryMeal>>{
-            override fun onChanged(value: List<CategoryMeal>) {
+        homeMvvm.observePopularMeal().observe(viewLifecycleOwner,object : Observer<List<PopularMeal>>{
+            override fun onChanged(value: List<PopularMeal>) {
 
-                popularAdapter.setMeal(mealList = value as ArrayList<CategoryMeal>)
+                popularAdapter.setMeal(mealList = value as ArrayList<PopularMeal>)
             }
 
         })

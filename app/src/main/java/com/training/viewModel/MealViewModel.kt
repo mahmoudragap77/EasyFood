@@ -21,7 +21,7 @@ class MealViewModel :ViewModel() {
                 response: Response<MealList?>
             ) {
                 if (response.body()!= null){
-                    mealDetailLiveData.value= response.body()!!.meals[0]
+                    mealDetailLiveData.value= response.body()?.meals[0]
                 } else{
                     return
                 }

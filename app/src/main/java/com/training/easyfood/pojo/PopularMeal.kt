@@ -1,6 +1,6 @@
 package com.training.easyfood.pojo
 
-data class CategoryMeal(
+data class PopularMeal(
     val idMeal: String,
     val strMeal: String,
     val strMealThumb: String
