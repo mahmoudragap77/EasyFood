@@ -16,8 +16,7 @@ import com.training.easyfood.adapter.CategoryAdapter
 import com.training.easyfood.adapter.PopularAdapter
 import com.training.easyfood.databinding.FragmentHomeBinding
 import com.training.easyfood.pojo.Category
-import com.training.easyfood.pojo.CategoryList
-import com.training.easyfood.pojo.PopularMeal
+import com.training.easyfood.pojo.MealByCategory
 import com.training.easyfood.pojo.Meal
 import com.training.viewModel.HomeViewModel
 import com.training.viewModel.MealViewModel
@@ -110,10 +109,10 @@ companion object{
     }
 
     private fun observePopularMeal() {
-        homeMvvm.observePopularMeal().observe(viewLifecycleOwner,object : Observer<List<PopularMeal>>{
-            override fun onChanged(value: List<PopularMeal>) {
+        homeMvvm.observePopularMeal().observe(viewLifecycleOwner,object : Observer<List<MealByCategory>>{
+            override fun onChanged(value: List<MealByCategory>) {
 
-                popularAdapter.setMeal(mealList = value as ArrayList<PopularMeal>)
+                popularAdapter.setMeal(mealList = value as ArrayList<MealByCategory>)
             }
 
         })

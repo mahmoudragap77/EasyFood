@@ -6,8 +6,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.training.easyfood.databinding.CategoryListBinding
 import com.training.easyfood.pojo.Category
-import com.training.easyfood.pojo.CategoryList
-import com.training.easyfood.pojo.PopularMeal
 
 class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
