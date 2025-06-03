@@ -20,6 +20,8 @@ class MealViewModel :ViewModel() {
                 call: Call<MealList?>,
                 response: Response<MealList?>
             ) {
+
+
                 if (response.body()!= null){
                     mealDetailLiveData.value= response.body()?.meals[0]
                 } else{
