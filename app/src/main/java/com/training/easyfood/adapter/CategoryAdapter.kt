@@ -9,7 +9,7 @@ import com.training.easyfood.pojo.Category
 
 class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
-//    lateinit var onItemClick:((Category) -> Unit)
+     var onItemClick:((Category) -> Unit)? =null
     var categoriList = ArrayList<Category>()
 
 
@@ -37,9 +37,9 @@ class CategoryAdapter : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>
 
         holder.binding.categoryText.text=categoriList[position].strCategory
 
-//        holder.itemView.setOnClickListener {
-//            onItemClick.invoke(categoriList[position])
-//        }
+        holder.itemView.setOnClickListener {
+            onItemClick!!.invoke(categoriList[position])
+        }
     }
 
     override fun getItemCount(): Int {
