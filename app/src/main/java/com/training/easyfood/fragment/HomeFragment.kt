@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.training.easyfood.activity.MealByCategoryActivity
 import com.training.easyfood.activity.MealInformationActivity
 import com.training.easyfood.adapter.CategoryAdapter
 import com.training.easyfood.adapter.PopularAdapter
@@ -34,6 +35,7 @@ companion object{
     const val MEAL_ID  ="com.training.easyfood.fragment.idMeal"
     const  val MEAL_NAME  ="com.training.easyfood.fragment.nameMEal"
     const val MEAL_THUMB ="com.training.easyfood.fragment.thumbMeal"
+    const val CATEGORY_NAME ="com.training.easyfood.fragment.categoryName"
 }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,19 +77,17 @@ companion object{
 
         homeMvvm.getCategoryList()
         observeCategoryList()
-//        onCategoryListClick()
+        onCategoryListClick()
     }
 
-//    private fun onCategoryListClick() {
-//        categoryAdapter.onItemClick= {
-//            category ->
-//            val intent = Intent(activity, MealInformationActivity::class.java)
-//            intent.putExtra(MEAL_ID,category.idCategory)
-//            intent.putExtra(MEAL_THUMB,category.strCategoryThumb)
-//            intent.putExtra(MEAL_NAME,category.strCategory)
-//            startActivity(intent)
-//        }
-//    }
+    private fun onCategoryListClick() {
+        categoryAdapter.onItemClick= {
+            category ->
+            val intent = Intent(activity, MealByCategoryActivity::class.java)
+            intent.putExtra(CATEGORY_NAME,category.strCategory)
+            startActivity(intent)
+        }
+    }
 
     private fun observeCategoryList() {
         homeMvvm.observeCategoryList().observe(viewLifecycleOwner, object : Observer<List<Category>>{
