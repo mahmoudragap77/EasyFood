@@ -24,7 +24,7 @@ class MealInformationActivity : AppCompatActivity() {
     lateinit var mealThumb : String
     lateinit var binding : ActivityMealInformationBinding
     lateinit var mealMVVM : MealViewModel
-    lateinit var youTubeLink : String
+     var youTubeLink : String?=null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
