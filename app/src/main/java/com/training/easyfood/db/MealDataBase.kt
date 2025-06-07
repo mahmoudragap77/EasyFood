@@ -21,7 +21,7 @@ abstract class MealDataBase() : RoomDatabase() {
 
         @Synchronized
         fun getInstance(context: Context): MealDataBase{
-            if (INSTANCE!=null){
+            if (INSTANCE==null){
                 INSTANCE = Room.databaseBuilder(
                     context,
                     MealDataBase::class.java,

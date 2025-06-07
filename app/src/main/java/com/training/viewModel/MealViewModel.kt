@@ -4,14 +4,19 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.training.easyfood.db.MealDataBase
 import com.training.easyfood.pojo.Meal
 import com.training.easyfood.pojo.MealList
 import com.training.easyfood.retrofit.RetrofitInstance
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MealViewModel :ViewModel() {
+class MealViewModel(
+    val mealDataBase: MealDataBase
+) :ViewModel() {
  private var mealDetailLiveData = MutableLiveData<Meal>()
 
       fun getMealDetail(id:String){
@@ -42,6 +47,17 @@ class MealViewModel :ViewModel() {
     fun observeMealDetail(): LiveData<Meal>
     {
         return mealDetailLiveData
+    }
+
+    fun InsertMeal(meal: Meal){
+       viewModelScope.launch {
+           mealDataBase.dao().upsert(meal)
+       }
+    }
+    fun deleteMeal(meal: Meal){
+       viewModelScope.launch {
+           mealDataBase.dao().delete(meal)
+       }
     }
 
 }
