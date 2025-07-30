@@ -3,6 +3,7 @@ package com.training.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.training.easyfood.db.MealDataBase
 import com.training.easyfood.pojo.Category
 import com.training.easyfood.pojo.CategoryList
@@ -11,6 +12,7 @@ import com.training.easyfood.pojo.MealByCategory
 import com.training.easyfood.pojo.Meal
 import com.training.easyfood.pojo.MealList
 import com.training.easyfood.retrofit.RetrofitInstance
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -113,5 +115,16 @@ class HomeViewModel(
 
     fun observeFavoriteLiveData() : LiveData<List<Meal>>{
         return mealFavoriteLiveData
+    }
+
+    fun InsertMeal(meal: Meal){
+        viewModelScope.launch {
+            mealDataBase.dao().upsert(meal)
+        }
+    }
+    fun deleteMeal(meal: Meal){
+        viewModelScope.launch {
+            mealDataBase.dao().delete(meal)
+        }
     }
 }
