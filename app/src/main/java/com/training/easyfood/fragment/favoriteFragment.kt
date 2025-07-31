@@ -64,19 +64,19 @@ class favoriteFragment : Fragment() {
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
                 target:RecyclerView.ViewHolder
-            ): Boolean=true
+            ) =true
 
             override fun onSwiped(
                 viewHolder: RecyclerView.ViewHolder,
                 direction: Int
             ) {
                 val position = viewHolder.adapterPosition
+                val deletedMeal = favoriteMealAdapter.differ.currentList[position]
                 viewModel.deleteMeal(favoriteMealAdapter.differ.currentList[position])
-                favoriteMealAdapter.notifyItemRemoved(position)
 
-                Snackbar.make(requireView(),"Meal Deleted",Snackbar.LENGTH_LONG).setAction(
+                Snackbar.make(requireView(),"Meal Deleted Do You Want to....",Snackbar.LENGTH_LONG).setAction(
                     "Undo",View.OnClickListener {
-                        viewModel.InsertMeal(favoriteMealAdapter.differ.currentList[position])
+                        viewModel.InsertMeal(deletedMeal)
                     }
                 ).show()
             }

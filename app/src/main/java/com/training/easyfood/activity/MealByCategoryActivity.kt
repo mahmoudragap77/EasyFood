@@ -1,6 +1,7 @@
 package com.training.easyfood.activity
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +14,9 @@ import com.training.easyfood.R
 import com.training.easyfood.adapter.MealByCategoryAdapter
 import com.training.easyfood.databinding.ActivityMealByCategoryBinding
 import com.training.easyfood.fragment.HomeFragment
+import com.training.easyfood.fragment.HomeFragment.Companion.MEAL_ID
+import com.training.easyfood.fragment.HomeFragment.Companion.MEAL_NAME
+import com.training.easyfood.fragment.HomeFragment.Companion.MEAL_THUMB
 import com.training.easyfood.pojo.MealByCategory
 import com.training.viewModel.MealByCategoryViewModel
 
@@ -35,9 +39,18 @@ class MealByCategoryActivity : AppCompatActivity() {
 
         mealByCategoryViewModel.getMealByCategory(mealByCategoryName)
         observeMealByCategory()
-
+        onCategoryMealClick()
     }
 
+    private fun onCategoryMealClick() {
+        mealByCategoryAdapter.onItemClick={meal ->
+            val intent = Intent(applicationContext, MealInformationActivity::class.java)
+            intent.putExtra(MEAL_ID,meal.idMeal)
+            intent.putExtra(MEAL_NAME,meal.strMeal)
+            intent.putExtra(MEAL_THUMB,meal.strMealThumb)
+            startActivity(intent)
+        }
+    }
     private fun preparRecView() {
         mealByCategoryAdapter= MealByCategoryAdapter()
         binding.mealsByCategoryRv.apply {
