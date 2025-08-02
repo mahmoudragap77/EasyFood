@@ -1,5 +1,6 @@
 package com.training.viewModel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -26,6 +27,7 @@ class HomeViewModel(
     private var mealByCategory = MutableLiveData<List<MealByCategory>>()
     private var categoryList = MutableLiveData<List<Category>>()
     private var mealFavoriteLiveData = mealDataBase.dao().getAllMeal()
+    private var bottomSheetMealLiveData = MutableLiveData<Meal>()
 
     fun getCategoryList(){
         RetrofitInstance.api.getCategoryList().enqueue(object : Callback<CategoryList>{
@@ -108,7 +110,31 @@ class HomeViewModel(
             }
         })
     }
+    fun getMealById(id: String){
+        RetrofitInstance.api.getMealDetails(id).enqueue(object : Callback<MealList>{
+            override fun onResponse(
+                call: Call<MealList?>,
+                response: Response<MealList?>
+            ) {
+                val meal = response.body()?.meals?.first()
+                meal?.let { meal->
+                    bottomSheetMealLiveData.postValue(meal)
+                }
+            }
 
+            override fun onFailure(
+                call: Call<MealList?>,
+                t: Throwable
+            ) {
+                Log.e("HomeViewModel",t.message.toString())
+            }
+
+        })
+    }
+
+    fun observeSheetLiveData(): LiveData<Meal>{
+        return bottomSheetMealLiveData
+    }
     fun observePopularMeal(): LiveData<List<MealByCategory>>{
         return mealByCategory
     }
