@@ -16,6 +16,7 @@ import com.training.easyfood.activity.MealInformationActivity
 import com.training.easyfood.adapter.CategoryAdapter
 import com.training.easyfood.adapter.PopularAdapter
 import com.training.easyfood.databinding.FragmentHomeBinding
+import com.training.easyfood.fragment.mealsheet.MealSheetDialogue
 import com.training.easyfood.pojo.Category
 import com.training.easyfood.pojo.MealByCategory
 import com.training.easyfood.pojo.Meal
@@ -78,6 +79,14 @@ companion object{
         viewModel.getCategoryList()
         observeCategoryList()
         onCategoryListClick()
+        onLongPopularItemClick()
+    }
+
+    private fun onLongPopularItemClick() {
+        popularAdapter.onLongItemClick={meal->
+            val mealBottomSheetFragment= MealSheetDialogue.newInstance(meal.idMeal)
+            mealBottomSheetFragment.show(childFragmentManager,"Meal Info")
+        }
     }
 
     private fun onCategoryListClick() {

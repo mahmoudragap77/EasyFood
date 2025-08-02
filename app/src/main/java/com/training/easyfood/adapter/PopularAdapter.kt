@@ -10,6 +10,7 @@ import com.training.easyfood.pojo.MealByCategory
 class PopularAdapter() : RecyclerView.Adapter<PopularAdapter.PopularViewHolder>() {
 
     lateinit var onItemClick:((MealByCategory) -> Unit)
+     var onLongItemClick:((MealByCategory) -> Unit)?=null
     var mealList = ArrayList<MealByCategory>()
 
     fun setMeal(mealList: ArrayList<MealByCategory>){
@@ -34,6 +35,10 @@ class PopularAdapter() : RecyclerView.Adapter<PopularAdapter.PopularViewHolder>(
             .into(holder.binding.popularMealImg)
         holder.itemView.setOnClickListener {
             onItemClick.invoke(mealList[position])
+        }
+        holder.itemView.setOnLongClickListener {
+            onLongItemClick?.invoke(mealList[position])
+            true
         }
     }
 
