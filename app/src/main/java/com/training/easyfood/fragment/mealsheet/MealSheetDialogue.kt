@@ -18,19 +18,20 @@ import kotlin.jvm.java
 
 private const val MEAL_ID = "param1"
 
-private lateinit var binding: FragmentMealSheetDialogueBinding
-private lateinit var viewModel: HomeViewModel
+
 
 
 class MealSheetDialogue : BottomSheetDialogFragment() {
     private var mealId: String? = null
-    private var mealName: String? = null
-    private var mealThumb: String? = null
 
+    private lateinit var binding: FragmentMealSheetDialogueBinding
+    private lateinit var viewModel: HomeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+            arguments?.let {
+                mealId=it.getString(MEAL_ID)
+            }
         viewModel = (activity as MainActivity).viewModel
     }
 
@@ -67,6 +68,9 @@ class MealSheetDialogue : BottomSheetDialogFragment() {
         }
 
     }
+
+    private var mealName: String? = null
+    private var mealThumb: String? = null
 
     private fun observeBottomSheetMeal() {
         viewModel.observeSheetLiveData().observe(viewLifecycleOwner) { meal ->
