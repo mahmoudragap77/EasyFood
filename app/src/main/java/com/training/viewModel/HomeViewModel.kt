@@ -116,7 +116,7 @@ class HomeViewModel(
                 call: Call<MealList?>,
                 response: Response<MealList?>
             ) {
-                val meal = response.body()?.meals?.first()
+                val meal = response.body()?.meals[0]
                 meal?.let { meal->
                     bottomSheetMealLiveData.postValue(meal)
                 }
