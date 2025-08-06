@@ -7,9 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.training.easyfood.R
 import com.training.easyfood.activity.MainActivity
 import com.training.easyfood.activity.MealByCategoryActivity
 import com.training.easyfood.activity.MealInformationActivity
@@ -80,6 +82,16 @@ companion object{
         observeCategoryList()
         onCategoryListClick()
         onLongPopularItemClick()
+
+
+        onSearchViewClick()
+    }
+
+    private fun onSearchViewClick() {
+        binding.searchIconId.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_searchMealFragment)
+        }
+
     }
 
     private fun onLongPopularItemClick() {

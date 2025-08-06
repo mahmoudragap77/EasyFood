@@ -2,21 +2,18 @@ package com.training.easyfood.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import com.training.easyfood.R
 import com.training.easyfood.activity.MainActivity
 import com.training.easyfood.activity.MealInformationActivity
-import com.training.easyfood.adapter.FavoriteMealAdapter
+import com.training.easyfood.adapter.MealAdapter
 import com.training.easyfood.databinding.FragmentFavoriteBinding
 import com.training.easyfood.fragment.HomeFragment.Companion.MEAL_ID
 import com.training.easyfood.fragment.HomeFragment.Companion.MEAL_NAME
@@ -27,7 +24,7 @@ import com.training.viewModel.HomeViewModel
 class favoriteFragment : Fragment() {
     lateinit var binding: FragmentFavoriteBinding
     lateinit var viewModel: HomeViewModel
-    lateinit var favoriteMealAdapter: FavoriteMealAdapter
+    lateinit var mealAdapter: MealAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,8 +68,8 @@ class favoriteFragment : Fragment() {
                 direction: Int
             ) {
                 val position = viewHolder.adapterPosition
-                val deletedMeal = favoriteMealAdapter.differ.currentList[position]
-                viewModel.deleteMeal(favoriteMealAdapter.differ.currentList[position])
+                val deletedMeal = mealAdapter.differ.currentList[position]
+                viewModel.deleteMeal(mealAdapter.differ.currentList[position])
 
                 Snackbar.make(requireView(),"Meal Deleted Do You Want to....",Snackbar.LENGTH_LONG).setAction(
                     "Undo",View.OnClickListener {
@@ -87,7 +84,7 @@ class favoriteFragment : Fragment() {
     }
 
     private fun onFavoriteMealClick() {
-        favoriteMealAdapter.onItemClick={meal ->
+        mealAdapter.onItemClick={ meal ->
             val intent = Intent(activity, MealInformationActivity::class.java)
             intent.putExtra(MEAL_ID,meal.idMeal)
             intent.putExtra(MEAL_NAME,meal.strMeal)
@@ -97,9 +94,9 @@ class favoriteFragment : Fragment() {
     }
 
     private fun prepareRecycleView() {
-        favoriteMealAdapter = FavoriteMealAdapter()
+        mealAdapter = MealAdapter()
         binding.rvFavorite.apply {
-            adapter=favoriteMealAdapter
+            adapter=mealAdapter
             layoutManager= GridLayoutManager(context,2, GridLayoutManager.VERTICAL,false)
         }
     }
@@ -107,7 +104,7 @@ class favoriteFragment : Fragment() {
     private fun onserveFavoriteMeal() {
        viewModel.observeFavoriteLiveData().observe(viewLifecycleOwner,object : Observer<List<Meal>>{
            override fun onChanged(value: List<Meal>) {
-                   favoriteMealAdapter.differ.submitList(value)
+                   mealAdapter.differ.submitList(value)
            }
 
        })
