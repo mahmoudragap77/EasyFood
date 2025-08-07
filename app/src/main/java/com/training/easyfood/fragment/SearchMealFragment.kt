@@ -1,5 +1,6 @@
 package com.training.easyfood.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,11 +9,13 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import com.training.easyfood.R
 import com.training.easyfood.activity.MainActivity
+import com.training.easyfood.activity.MealInformationActivity
 import com.training.easyfood.adapter.MealAdapter
 import com.training.easyfood.databinding.FragmentSearchMealBinding
-import com.training.easyfood.pojo.Meal
+import com.training.easyfood.fragment.HomeFragment.Companion.MEAL_ID
+import com.training.easyfood.fragment.HomeFragment.Companion.MEAL_NAME
+import com.training.easyfood.fragment.HomeFragment.Companion.MEAL_THUMB
 import com.training.viewModel.HomeViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -58,8 +61,22 @@ class SearchMealFragment : Fragment() {
           }
         }
 
+        onSearchedMealClick()
+
 
     }
+
+    private fun onSearchedMealClick() {
+            searchMealAdapter.onItemClick={ meal ->
+                val intent = Intent(activity, MealInformationActivity::class.java)
+                intent.putExtra(MEAL_ID,meal.idMeal)
+                intent.putExtra(MEAL_NAME,meal.strMeal)
+                intent.putExtra(MEAL_THUMB,meal.strMealThumb)
+                startActivity(intent)
+            }
+        }
+
+
 
     private fun observeSearchMealLiveData() {
         viewModel.observeSearchedMealLiveData().observe(
